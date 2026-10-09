@@ -10,7 +10,7 @@ pool:
   name: 'Default'
 
 steps:
-- task: NodeTool@0
+- task: UseNode@1
   inputs:
     versionSpec: '22.x'
   displayName: 'Install Node.js'
