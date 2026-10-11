@@ -15,6 +15,36 @@ steps:
     versionSpec: '22.x'
   displayName: 'Install Node.js'
 
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/js-e2e-express-server.zip'
+    replaceExistingArchive: true
+
+
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artiFactName: 'drop'
+    publishLocation: 'Container'
+
+- task: DownloadBuildArtifacts@0
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'drop'
+    downloadPath: '$(System.ArtifactsDirectory)'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Azure connection'
+    appType: 'webApp'
+    appName: 'exercise-13-tillman'
+    package: '$(System.ArticfactsDirectory)/drop/js-e2e-express-server.zip'
+
 - script: |
     npm install
     npm run build
